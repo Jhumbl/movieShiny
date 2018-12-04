@@ -9,7 +9,7 @@ library(plotly)
 library(shinydashboard)
 
 # Read in Data
-cleanData <- read.csv("cleanData.csv", header = TRUE)
+cleanData <- read.csv("data/cleanData.csv", header = TRUE)
 cleanData <- cleanData[, c(-2, -1,-32)]
 cleanData <- cleanData[, c(29, 1:28)]
 

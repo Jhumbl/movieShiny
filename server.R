@@ -12,16 +12,16 @@ library(scales)
 library(readr)
 library(wordcloud)
 library(data.table)
-source("functions.R")
+source("functions/functions.R")
 
 # Read in Data
-cleanData <- read.csv("cleanData.csv", header = TRUE)
+cleanData <- read.csv("data/cleanData.csv", header = TRUE)
 genrePlot <- cleanData
-cleaned <- read_csv("cleanCountryData.csv", col_names = TRUE)
+cleaned <- read_csv("data/cleanCountryData.csv", col_names = TRUE)
 cleaned <- cleaned[,-1]
-wordcloudData <- read_csv("wordcloudcsv.csv", col_names = TRUE)
+wordcloudData <- read_csv("data/wordcloudcsv.csv", col_names = TRUE)
 wordcloudData <- wordcloudData[,-1]
-ages <- read_csv("AgeData.csv", col_names = TRUE)
+ages <- read_csv("data/AgeData.csv", col_names = TRUE)
 
 # Set up server
 shinyServer(function(input, output, session){
