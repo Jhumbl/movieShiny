@@ -5,6 +5,6 @@ account: jhumble
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 603895
-bundleId: 1740775
+bundleId: 1740785
 url: https://jhumble.shinyapps.io/Movies-Visualisation/
-when: 1543965260.64949
+when: 1543965572.76032
