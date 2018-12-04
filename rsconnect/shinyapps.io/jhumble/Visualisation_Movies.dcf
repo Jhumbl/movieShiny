@@ -1,0 +1,10 @@
+name: Visualisation_Movies
+title:
+username:
+account: jhumble
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 603863
+bundleId: 1740672
+url: https://jhumble.shinyapps.io/Visualisation_Movies/
+when: 1543962639.73885

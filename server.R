@@ -1,6 +1,11 @@
+# ============================================================
+# Telling Stories with Data - Movie Visualisation
+# ============================================================
+
+# Install Relevant Packages
 library(dplyr)
 library(ggplot2)
-devtools::install_github("ropensci/plotly")
+library(mapproj)
 library(plotly)
 library(shiny)
 library(scales)
@@ -8,6 +13,8 @@ library(readr)
 library(wordcloud)
 library(data.table)
 source("functions.R")
+
+# Read in Data
 cleanData <- read.csv("cleanData.csv", header = TRUE)
 genrePlot <- cleanData
 cleaned <- read_csv("cleanCountryData.csv", col_names = TRUE)
@@ -16,6 +23,7 @@ wordcloudData <- read_csv("wordcloudcsv.csv", col_names = TRUE)
 wordcloudData <- wordcloudData[,-1]
 ages <- read_csv("AgeData.csv", col_names = TRUE)
 
+# Set up server
 shinyServer(function(input, output, session){
         output$barPlot <- renderPlotly({
                 
@@ -171,14 +179,18 @@ shinyServer(function(input, output, session){
                 genreSum <-sort(genreSum, decreasing = TRUE)
                 genreSum <- data.frame(genreSum)
                 genreSum <- setDT(genreSum, keep.rownames = TRUE)
-                colnames(genreSum) <- c("rn", "sum")
+                colnames(genreSum) <- c("Genre", "sum")
+                genreSum$Genre <- reorder(genreSum$Genre, genreSum$sum)
                 
-                # Plot
+                #===================================================================
+                # Plot 2: Bar Plot Genres
+                #===================================================================
+                
                 genreSum %>%
                         arrange(desc(sum)) %>%
-                        mutate(genreSum = forcats::fct_reorder(rn, sum)) %>%
+                        mutate(genreSum = forcats::fct_reorder(Genre, sum)) %>%
                         head(noOfCountries) %>%
-                        ggplot(aes(reorder(rn, sum), sum)) +
+                        ggplot(aes(Genre , sum)) +
                         geom_bar(stat = "identity") +
                         coord_flip() +
                         theme_light() +
@@ -197,6 +209,10 @@ shinyServer(function(input, output, session){
                 } else {
                          colnames(wordcloudData) <- c("Title", "Freq", "notUsing", "Using")
                 }
+                
+                #===================================================================
+                # Plot 4: Wordcloud
+                #===================================================================
                 
                 wordcloud(wordcloudData$Title, wordcloudData$Freq, scale = c(11, 0.3), max.words = numberOfWords, 
                           random.order = FALSE, colors = wordcloudData$Using, ordered.colors = TRUE, title = "Hello")
@@ -231,13 +247,17 @@ shinyServer(function(input, output, session){
                 
                 agesData <- dplyr::filter(ages, Group %in% groups)
                 
+                #===================================================================
+                # Plot 3: Line Chart
+                #===================================================================
+                
                 r <- ggplot(data = agesData) +
                         geom_line(aes(Year, Age, color = Group)) +
                         scale_color_manual(values = c("Actors" = "#3B9AB2",
                                                       "Actresses" = "#EBCC2A", 
                                                       "Producers" = "#78B7C5", 
                                                       "Directors" = "#E1AF00", 
-                                                      "Composers" = "#F21A00")) +#EBCC2A#78B7C5
+                                                      "Composers" = "#F21A00")) + #EBCC2A#78B7C5
                         labs(title = "Average Age of People in Film") +
                         xlab("Year") +
                         theme_light() +

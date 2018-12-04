@@ -1,0 +1,10 @@
+name: movieshiny
+title:
+username:
+account: jhumble
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 600556
+bundleId: 1734973
+url: https://jhumble.shinyapps.io/movieshiny/
+when: 1543795094.9141

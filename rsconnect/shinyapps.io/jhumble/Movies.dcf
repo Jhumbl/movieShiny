@@ -1,0 +1,10 @@
+name: Movies
+title:
+username:
+account: jhumble
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 600574
+bundleId: 1735012
+url: https://jhumble.shinyapps.io/Movies/
+when: 1543796199.59956

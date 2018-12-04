@@ -1,20 +1,34 @@
-cleanData <- read.csv("cleanData.csv", header = TRUE)
-cleanData <- cleanData[, c(-2, -1,-32)]
-cleanData <- cleanData[, c(29, 1:28)]
+# ============================================================
+# Telling Stories with Data - Movie Visualisation
+# ============================================================
+
+# Install Relevant Packages
 library(shiny)
+library(markdown)
 library(plotly)
 library(shinydashboard)
 
+# Read in Data
+cleanData <- read.csv("cleanData.csv", header = TRUE)
+cleanData <- cleanData[, c(-2, -1,-32)]
+cleanData <- cleanData[, c(29, 1:28)]
+
+# Set up User Interface
 ui <- dashboardPage(
         dashboardHeader(title = "Movies Data"),
+        # Sidebar
         dashboardSidebar(
                 hr(),
                 sidebarMenu( id = "tabs",
-                        menuItem("Plot1", tabName = "Plot1", icon = icon("globe-americas")),
-                        menuItem("Plot2", tabName = "Plot2", icon = icon("dashboard")),
-                        menuItem("Plot3", tabName = "Plot3", icon = icon("th")),
-                        menuItem("Plot4", tabName = "Plot4", icon = icon("th")),
-                        menuItem("Plot5", tabName = "Plot5", icon = icon("th")),
+                        menuItem("Movie Count", tabName = "Plot1", icon = icon("globe-americas")),
+                        menuItem("Genre Count", tabName = "Plot2", icon = icon("chart-bar")),
+                        menuItem("IMDb Average Age", tabName = "IMDb1", icon = icon("chart-line")),
+                        menuItem("IMDb Wordcloud", tabName = "IMDb2", icon = icon("cloud")),
+                        menuItem("About and Code",  icon = icon("file-text-o"),
+                                 menuSubItem("About and Sources", tabName = "about", icon = icon("angle-right")),
+                                 menuSubItem("ui.R", tabName = "ui", icon = icon("angle-right")),
+                                 menuSubItem("server.R", tabName = "server", icon = icon("angle-right"))
+                        ),
                 hr()
                         
                 ),
@@ -44,18 +58,18 @@ ui <- dashboardPage(
                                                                  "Asia", "Oceania"), selected = "World")
                                  ),
                                  menuItem(
-                                         sliderInput("Number of Countries2", "Select the Number of Countries to be shown for bar chart:",
+                                         sliderInput("Number of Countries2", "Select the Number of Genres to be shown:",
                                                       min = 3, max = 30, value = 20)
 
                                          )
                         ),
-                conditionalPanel("input.tabs == 'Plot4'",
+                conditionalPanel("input.tabs == 'IMDb2'",
                                  menuItem(
                                          sliderInput("words", "Number of words:", min = 50, max = 1000, value = 300)
                                  ),
                                  checkboxInput("Sent", HTML("View Senteminet of Words: <br> Blue-Positive <br> Red-Negative <br> Grey-Neutral"), value = FALSE)
                         ),
-                conditionalPanel("input.tabs == 'Plot3'",
+                conditionalPanel("input.tabs == 'IMDb1'",
                                  checkboxInput("Actors", "Actors", value = TRUE),
                                  checkboxInput("Actresses", "Actresses", value = TRUE),
                                  checkboxInput("Directors", "Directors", value = FALSE),
@@ -63,6 +77,7 @@ ui <- dashboardPage(
                                  checkboxInput("Composers", "Composers", value = FALSE)
                 )
         ),
+        # Main Body
         dashboardBody(
                 tabItems(
                         tabItem(tabName = "Plot1",
@@ -91,7 +106,7 @@ ui <- dashboardPage(
                                         )
                                 )
                         ),
-                        tabItem(tabName = "Plot4", 
+                        tabItem(tabName = "IMDb2", 
                                 fluidPage(
                                         box(
                                                 collapsible  = TRUE, title = "Wordcloud of Movie Titles is the IMDB Dataset",
@@ -101,7 +116,7 @@ ui <- dashboardPage(
                                         )
                                 )
                         ),
-                        tabItem(tabName = "Plot3",
+                        tabItem(tabName = "IMDb1",
                                 fluidRow(
                                         box(
                                                 collapsible =  TRUE, title = "Average Age of People in Film - IMDB Dataset",
@@ -111,7 +126,24 @@ ui <- dashboardPage(
                                         )
                                 )
                         ),
-                        tabItem(tabName = "Plot5", h1("Hello"))
+                        tabItem(tabName = "about",
+                                box( width = NULL, status = "primary", solidHeader = TRUE, title="ui.R",
+                                     br(),br(),
+                                     pre(includeMarkdown("README.md"))
+                                )
+                        ),
+                        tabItem(tabName = "ui",
+                                box( width = NULL, status = "primary", solidHeader = TRUE, title="ui.R",
+                                     br(),br(),
+                                     pre(includeText("ui.R"))
+                                )
+                        ),
+                        tabItem(tabName = "server",
+                                box( width = NULL, status = "primary", solidHeader = TRUE, title="server.R",
+                                     br(),br(),
+                                     pre(includeText("server.R"))
+                                )
+                        )
                 )
         )
 )
